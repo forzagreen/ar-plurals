@@ -1,0 +1,16 @@
+# sources/ holds local provenance; track only the source PDF
+sources/*
+!sources/دليل جموع التكسير.pdf
+
+# python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# os / editor cruft
+.DS_Store
+~$*
+*.tmp
+
+# local preview symlink (data served at /data, like Pages)
+/site/data

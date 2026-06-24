@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>جموع التكسير — أوزان المفرد والجمع</title>
+  <meta name="description" content="قاعدة بيانات تفاعلية تربط أوزان المفرد بأوزان جموع التكسير في العربية، مع الأمثلة المُنظَّمة: جدول، مُستكشِف، مصفوفة، ومخطّط سانكي." />
+
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="title-row">
+        <h1>جموع التكسير</h1>
+        <a id="repo-link" class="repo-link" href="#" hidden>المستودع على GitHub ↗</a>
+      </div>
+      <p class="subtitle">قاعدةٌ تفاعلية تربط <strong>أوزان المفرد</strong> بـ<strong>أوزان جمع التكسير</strong>، مع الأمثلة.</p>
+      <div class="stats" id="stats" aria-live="polite"></div>
+      <div class="downloads">
+        <span class="dl-label">تنزيل البيانات:</span>
+        <a href="data/csv/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.csv" download>CSV</a>
+        <a href="data/json/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.json" download>JSON</a>
+        <a href="data/xlsx/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.xlsx" download>XLSX</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs wrap" role="tablist">
+    <button class="tab is-active" data-view="table" role="tab" aria-selected="true">الجدول</button>
+    <button class="tab" data-view="graph" role="tab" aria-selected="false">مخطّط سانكي</button>
+    <button class="tab" data-view="matrix" role="tab" aria-selected="false">المصفوفة</button>
+  </nav>
+
+  <main class="wrap">
+    <!-- ============================ TABLE ============================ -->
+    <section id="view-table" class="view is-active">
+      <div class="controls">
+        <div class="control search">
+          <input id="search" type="search" placeholder="ابحث عن وزن أو مثال… (مثلًا: فعيل، أفعل، كتاب)"
+                 autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="control">
+          <span class="control-label">النوع</span>
+          <div class="chips" id="type-filter">
+            <button class="chip is-active" data-type="all">الكل</button>
+            <button class="chip" data-type="اسم">اسم</button>
+            <button class="chip" data-type="صفة">صفة</button>
+          </div>
+        </div>
+        <div class="control">
+          <span class="control-label">العرض</span>
+          <div class="chips" id="mode-filter">
+            <button class="chip is-active" data-mode="flat">الجدول الكامل</button>
+            <button class="chip" data-mode="bySingular">من المفرد إلى الجمع</button>
+            <button class="chip" data-mode="byPlural">من الجمع إلى المفرد</button>
+          </div>
+        </div>
+      </div>
+      <div id="active-filter" class="active-filter" hidden></div>
+      <p class="result-count" id="result-count"></p>
+      <div class="table-scroll">
+        <table id="table" class="data-table"></table>
+      </div>
+      <p class="empty" id="empty" hidden>لا توجد نتائج مطابقة.</p>
+    </section>
+
+    <!-- ============================ MATRIX ============================ -->
+    <section id="view-matrix" class="view">
+      <div class="controls">
+        <div class="control">
+          <span class="control-label">ترتيب الأوزان</span>
+          <div class="chips" id="matrix-order">
+            <button class="chip is-active" data-order="degree">بحسب الكثرة</button>
+            <button class="chip" data-order="alpha">أبجديًّا</button>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="sw noun"></i> اسم</span>
+          <span><i class="sw adj"></i> صفة</span>
+          <span><i class="sw both"></i> اسم وصفة</span>
+          <span class="legend-hint">مرّر على أيِّ خليّة لرؤية الأمثلة، أو انقر عليها لعرض الوزن في الجدول</span>
+        </div>
+      </div>
+      <div id="matrix" class="matrix-scroll"></div>
+    </section>
+
+    <!-- ============================ SANKEY ============================ -->
+    <section id="view-graph" class="view">
+      <div class="controls">
+        <div class="control">
+          <span class="control-label">العرض</span>
+          <select id="focus-select"></select>
+        </div>
+        <button id="sankey-reset" class="chip reset-btn" type="button">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          كل التقابُلات
+        </button>
+        <p class="graph-hint">يعرض المخطّط جميع التقابُلات. انقر على أيِّ وزنٍ للتركيز عليه، ومرّر المؤشر لإبراز ارتباطاته، وعلى أيِّ خيطٍ لرؤية أمثلته. وانقر زرّ «كل التقابُلات» للعودة إلى العرض الكامل.</p>
+      </div>
+      <div class="sankey-axes">
+        <span class="ax"><i class="sw singular"></i> أوزان المفرد</span>
+        <span class="ax">أوزان الجمع <i class="sw adj"></i></span>
+      </div>
+      <div id="sankey" class="sankey"></div>
+      <p id="sankey-fallback" class="empty" hidden>تعذّر تحميل مكتبة الرسم. تظهر العلاقات كاملةً في تبويبَي «الجدول» و«المصفوفة».</p>
+    </section>
+  </main>
+
+  <!-- shared tooltip for the matrix -->
+  <div id="tooltip" class="tooltip" hidden></div>
+
+  <footer class="site-footer wrap">
+    <p>مستخرَجٌ من «دليل جموع التكسير» ومُراجَعٌ ومُدقَّق. البيانات متاحة بصيغ CSV وJSON وXLSX.</p>
+    <p class="muted" id="generated"></p>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script defer src="assets/vendor/echarts.min.js"></script>
+  <script defer src="assets/app.js"></script>
+</body>
+</html>
