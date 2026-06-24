@@ -8,6 +8,11 @@
   var DB = window.PLURALS || { rows: [], generated: "" };
   var ROWS = DB.rows;
   var $ = function (s, r) { return (r || document).querySelector(s); };
+  // read a themeable token so the canvas Sankey matches the active light/dark palette
+  function cssVar(name, fallback) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
 
   /* ----------------------------- Arabic helpers ----------------------------- */
   var DIAC = /[ً-ْٰـ]/;
@@ -313,10 +318,11 @@
       var k = sId + ">" + pId; if (seen[k]) return; seen[k] = 1;
       links.push({ source: sId, target: pId, value: (cellMap[pr[0] + SEP + pr[1]] || []).length || 1 });
     });
+    var cSing = cssVar("--sankey-singular", "#1f6f54"), cPlur = cssVar("--sankey-plural", "#c8772b");
     var nodes = Object.keys(nodeSet).map(function (id) {
       var isS = nodeSet[id] === "S";
       // singular on the right (depth 1), plural on the left (depth 0) — flows R→L like Arabic
-      return { name: id, depth: isS ? 1 : 0, itemStyle: { color: isS ? "#1f6f54" : "#c8772b" } };
+      return { name: id, depth: isS ? 1 : 0, itemStyle: { color: isS ? cSing : cPlur } };
     });
     return { nodes: nodes, links: links };
   }
@@ -328,6 +334,9 @@
       g.nodes.filter(function (n) { return n.name[0] === "P"; }).length);
     var dense = g.nodes.length > 70;
     var fs = dense ? 12 : 16;
+    var isDark = document.documentElement.dataset.theme === "dark";
+    // faint base links read lighter on dark, so lift their opacity a touch there
+    var lineOp = dense ? (isDark ? 0.13 : 0.08) : (isDark ? 0.4 : 0.3);
     // give every node room to breathe so the all-at-once view stays legible
     $("#sankey").style.height = Math.min(4400, Math.max(460, perCol * 26 + 90)) + "px";
     chart.resize();
@@ -335,7 +344,8 @@
       animation: false,
       tooltip: {
         trigger: "item", confine: true,
-        textStyle: { fontFamily: "Noto Naskh Arabic, serif", fontSize: 15 },
+        backgroundColor: cssVar("--tip-bg", "#fff"), borderColor: cssVar("--line", "#e3dccc"),
+        textStyle: { color: cssVar("--ink", "#20303a"), fontFamily: "Noto Naskh Arabic, serif", fontSize: 15 },
         formatter: function (p) {
           if (p.dataType === "edge") {
             var s = nodeName(p.data.source), t = nodeName(p.data.target);
@@ -360,8 +370,8 @@
         emphasis: { focus: "adjacency", blurScope: "coordinateSystem", lineStyle: { opacity: 0.6 } },
         blur: { itemStyle: { opacity: 0.25 }, label: { opacity: 0.15 }, lineStyle: { opacity: 0.03 } },
         label: { fontFamily: "Noto Naskh Arabic, serif", fontSize: fs, fontWeight: "bold",
-          color: "#20303a", formatter: function (p) { return nodeName(p.name); } },
-        lineStyle: { color: "gradient", opacity: dense ? 0.08 : 0.3, curveness: 0.5 },
+          color: cssVar("--ink", "#20303a"), formatter: function (p) { return nodeName(p.name); } },
+        lineStyle: { color: "gradient", opacity: lineOp, curveness: 0.5 },
         data: g.nodes, links: g.links
       }]
     }, true);
@@ -395,6 +405,43 @@
     if (!skipHash && location.hash.slice(1) !== view) {
       history.replaceState(null, "", "#" + view);
     }
+  }
+
+  /* ================================ THEME ================================== */
+  // choice ∈ {auto, light, dark}; "auto" follows the OS. The resolved light/dark
+  // value drives CSS via <html data-theme>, and re-tints the canvas Sankey.
+  var prefersDark = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function themeChoice() { try { return localStorage.getItem("theme") || "auto"; } catch (e) { return "auto"; } }
+  function resolveTheme(choice) {
+    return (choice === "dark" || (choice === "auto" && prefersDark && prefersDark.matches)) ? "dark" : "light";
+  }
+  function applyTheme(choice) {
+    var root = document.documentElement, resolved = resolveTheme(choice);
+    root.dataset.theme = resolved;
+    root.dataset.themeChoice = choice;
+    var meta = $('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", resolved === "dark" ? "#14181b" : "#f5f1e8");
+    document.querySelectorAll(".theme-btn").forEach(function (b) {
+      var on = b.dataset.themeChoice === choice;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (graphDrawn && chart) renderGraph($("#focus-select").value); // recolor canvas viz
+  }
+  function setTheme(choice) {
+    try { localStorage.setItem("theme", choice); } catch (e) {}
+    applyTheme(choice);
+  }
+  function wireTheme() {
+    $("#theme-toggle").addEventListener("click", function (e) {
+      var b = e.target.closest(".theme-btn"); if (b) setTheme(b.dataset.themeChoice);
+    });
+    if (prefersDark) {
+      var onSys = function () { if (themeChoice() === "auto") applyTheme("auto"); };
+      if (prefersDark.addEventListener) prefersDark.addEventListener("change", onSys);
+      else if (prefersDark.addListener) prefersDark.addListener(onSys);
+    }
+    applyTheme(themeChoice());
   }
 
   /* =============================== bootstrap =============================== */
@@ -440,6 +487,7 @@
   renderStats();
   populateFocus();
   wire();
+  wireTheme();
   renderTable();
   window.addEventListener("hashchange", function () { switchView(location.hash.slice(1), true); });
   if (location.hash.slice(1)) switchView(location.hash.slice(1), true);
