@@ -108,13 +108,21 @@ body {
 
 /* ---------- header ---------- */
 .site-header { background: linear-gradient(180deg, var(--header-grad-a), var(--header-grad-b)); border-bottom: 1px solid var(--line); padding-block: 28px 22px; }
-.title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.logo-link { display: inline-flex; color: var(--accent); transition: color .15s, transform .15s; }
+.logo-link:hover { color: var(--accent-ink); transform: scale(1.04); }
+.wtb-logo { width: auto; height: clamp(40px, 8vw, 56px); display: block; }
 .header-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 h1 { font-family: var(--arabic); font-weight: 700; font-size: clamp(2rem, 5vw, 3rem); margin: 0; color: var(--accent-ink); letter-spacing: .5px; }
 .repo-link { color: var(--accent); text-decoration: none; font-weight: 600; font-size: .9rem; }
 .repo-link:hover { text-decoration: underline; }
 .subtitle { font-size: 1.08rem; margin: .4rem 0 0; }
 .subtitle strong { color: var(--accent-ink); }
+.credits { margin: .5rem 0 0; color: var(--muted); font-size: .9rem; line-height: 1.9; }
+.credits .sep { color: var(--line); margin-inline: 6px; font-weight: 700; }
+.credits a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.credits a:hover { text-decoration: underline; }
 .stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .stat { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 14px; box-shadow: var(--shadow); display: flex; align-items: baseline; gap: 8px; }
 .stat b { font-size: 1.25rem; color: var(--accent-ink); font-family: var(--arabic); }
@@ -132,10 +140,11 @@ h1 { font-family: var(--arabic); font-weight: 700; font-size: clamp(2rem, 5vw, 3
 .theme-btn.is-active { background: var(--accent); color: var(--chip-active-ink); }
 
 /* ---------- tabs ---------- */
-.tabs { display: flex; gap: 4px; margin-top: 22px; border-bottom: 2px solid var(--line); flex-wrap: wrap; }
-.tab { appearance: none; border: 0; background: transparent; cursor: pointer; font-family: var(--ui); font-size: 1rem; font-weight: 600; color: var(--muted); padding: 12px 18px; margin-bottom: -2px; border-bottom: 3px solid transparent; }
-.tab.is-active { color: var(--accent-ink); border-bottom-color: var(--accent); }
-.tab:hover { color: var(--accent-ink); }
+.tabs { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
+.tab { appearance: none; cursor: pointer; font-family: var(--ui); font-size: 1.02rem; font-weight: 700; color: var(--muted); padding: 11px 22px; border: 1px solid var(--line); background: var(--field-bg); border-radius: 999px; box-shadow: var(--shadow); transition: background-color .15s, color .15s, border-color .15s; }
+.tab:hover { color: var(--accent-ink); border-color: var(--accent); }
+.tab.is-active { background: var(--accent); border-color: var(--accent); color: var(--chip-active-ink); }
+.tab.is-active:hover { color: var(--chip-active-ink); }
 
 /* ---------- views & controls ---------- */
 .view { display: none; padding-block: 22px 48px; }
@@ -240,6 +249,9 @@ table.matrix { border-collapse: separate; border-spacing: 0; }
 
 /* ---------- footer ---------- */
 .site-footer { padding-block: 28px 48px; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); margin-top: 10px; }
+.site-footer p { margin: 0 0 6px; }
+.site-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.site-footer a:hover { text-decoration: underline; }
 .muted { color: var(--muted); }
 
 @media (max-width: 640px) {

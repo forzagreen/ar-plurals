@@ -1,40 +1,36 @@
-# الترخيص — License
+## Creative Commons Attribution 4.0 International License (CC BY 4.0)
 
-## البيانات / Dataset (`data/`)
+This dataset is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).  
 
-البيانات في مجلّد `data/` متاحةٌ بموجب رخصة المشاع الإبداعي: النسب — 4.0 دولي
-(**CC BY 4.0**)، مع نسبة العمل إلى مصدره «دليل جموع التكسير».
+You are free to:
 
-The dataset under `data/` is released under the
-[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
-license. Please attribute «دليل جموع التكسير» as the source.
+- Share — copy and redistribute the material in any medium or format.  
+- Adapt — remix, transform, and build upon the material for any purpose, even commercially.  
 
-## الشيفرة / Code (`scripts/`, `site/`)
+Under the following terms:
+- Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+  You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
-الشيفرة (نصوص البناء وموقع العرض) متاحةٌ بموجب رخصة **MIT**.
+For details, please read the full text of the Creative Commons Attribution 4.0 International License:
+https://creativecommons.org/licenses/by/4.0/legalcode
 
-The code (build scripts and the site) is released under the **MIT License**:
+-------------------------------------------------------
 
-```
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## رُخصة المشاع الإبداعي الدولية المُلزِمة بنسب العمل لمؤلِّفه (CC BY 4.0)
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+مجموعة المعطيات هذه مُرخَّصة برُخصة المشاع الإبداعي الدولية المُلزِمة بنسب العمل لمؤلِّفه  (CC BY 4.0)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+يمكنك:
 
-## المصدر / Source
+- المشاركة: أي نسخ وإعادة توزيع المادة بأي وسيلة أو تنسيق.
+- التعديل: إعادة إنتاج أو عمل تغيير أو بناء معطيات جديدة انطلاقًا من هذه المادة، بما في ذلك الاستعمال التجاري.
 
-«دليل جموع التكسير» — استُخرِجت منه الجداول ثم رُوجِعت ودُقِّقت.
+
+وفقًا للشروط التالية:
+
+-	النسبة: يلزم ذكر المؤلِّف المناسب، ووضع رابط إلى الرخصة، والإشارة إلى أي تغييرات أُجريت. لا قيود صارمة على كيفية نسبة العمل، ما خلا عدم الإيحاء بأن مؤلف العمل يؤيدك أو يؤيد استخدامك.
+- عدم فرض قيود إضافية — لا يجوز تطبيق شروط قانونية أو تدابير تقنية تقيّد الآخرين من استخدام مجموعة المعطيات كما تسمح به الرُخصة.
+
+يُمكن قراءة النص الكامل لرخصة المشاع الإبداعي الدولية المُلزِمة بنسب العمل لمؤلِّفه لمزيد من التفاصيل : 
+https://creativecommons.org/licenses/by/4.0/legalcode  

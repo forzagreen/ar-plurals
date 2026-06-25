@@ -13,6 +13,7 @@
 | CSV  | [جموع التكسير.csv](https://raw.githubusercontent.com/forzagreen/ar-plurals/main/data/csv/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.csv) |
 | JSON | [جموع التكسير.json](https://raw.githubusercontent.com/forzagreen/ar-plurals/main/data/json/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.json) |
 | XLSX | [جموع التكسير.xlsx](https://raw.githubusercontent.com/forzagreen/ar-plurals/main/data/xlsx/%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.xlsx) |
+| PDF  | [دليل جموع التكسير.pdf](https://raw.githubusercontent.com/forzagreen/ar-plurals/main/sources/%D8%AF%D9%84%D9%8A%D9%84%20%D8%AC%D9%85%D9%88%D8%B9%20%D8%A7%D9%84%D8%AA%D9%83%D8%B3%D9%8A%D8%B1.pdf) |
 
 صيغة JSON تتضمّن الأمثلة مُنظَّمةً (شرط كل تقابُل، وأزواجه، وما شذّ منه). ويمكن تنزيل البيانات من [الموقع](https://forzagreen.github.io/ar-plurals/) مباشرةً أيضًا.
 
@@ -20,10 +21,12 @@
 
 **إعداد المحتوى ومراجعته:**
 - مروان البوّاب — marwanbawab@gmail.com
+- د. محمد حسان الطيان
+- ممدوح عثمان
 
 **معالجة البيانات والنشر:**
 - وائل تلات — wael.tellat@gmail.com
-- ميشيل بكني — m.bakni@estia.fr
+- د. ميشيل بكني — m.bakni@estia.fr
 
 **تاريخ النشر:** يونيو 2026
 

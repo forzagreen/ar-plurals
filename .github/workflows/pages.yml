@@ -30,6 +30,8 @@ jobs:
           # ship the downloadable dataset alongside the site
           mkdir -p _site/data
           cp -r data/. _site/data/
+          # data/ holds a symlink to the source guide PDF; deploy the real file
+          cp "sources/دليل جموع التكسير.pdf" "_site/data/دليل جموع التكسير.pdf"
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v6
