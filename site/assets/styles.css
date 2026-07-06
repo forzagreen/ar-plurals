@@ -187,7 +187,7 @@ mark { background: var(--mark-bg); color: inherit; border-radius: 3px; padding: 
 .ex-block { margin-bottom: 9px; }
 .ex-block:last-child { margin-bottom: 0; }
 .ex-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 5px; }
-.cond { font-family: var(--ui); font-size: .82rem; color: var(--muted); }
+.cond { font-family: var(--ui); font-size: .92rem; font-weight: 600; color: var(--ink); }
 .cond::before { content: "•"; margin-inline-end: 6px; color: var(--cond-dot); }
 .badge-shadh { font-family: var(--ui); font-size: .72rem; font-weight: 700; color: var(--shadh-ink); background: var(--shadh-bg); border-radius: 999px; padding: 1px 9px; }
 .ex-pairs { display: flex; flex-wrap: wrap; gap: 6px; }

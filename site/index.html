@@ -21,6 +21,24 @@
     })();
   </script>
 
+  <!-- Google Analytics (GA4). Put your Measurement ID in GA_ID to enable.
+       While GA_ID is empty the site stays fully offline/self-contained: no script is
+       loaded and no external request is made. Set it to "G-XXXXXXXXXX" to turn on. -->
+  <script>
+    (function () {
+      var GA_ID = "G-327LE9DSB0"; // shared GA4 property for all forzagreen.github.io Pages sites
+      if (!GA_ID) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { dataLayer.push(arguments); };
+      gtag("js", new Date());
+      gtag("config", GA_ID);
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+    })();
+  </script>
+
   <link rel="stylesheet" href="assets/fonts.css" />
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
@@ -105,7 +123,7 @@
         <div class="control">
           <span class="control-label">النوع</span>
           <div class="chips" id="type-filter">
-            <button class="chip is-active" data-type="all">الكل</button>
+            <button class="chip is-active" data-type="all">اسم وصفة</button>
             <button class="chip" data-type="اسم">اسم</button>
             <button class="chip" data-type="صفة">صفة</button>
           </div>
@@ -114,8 +132,8 @@
           <span class="control-label">العرض</span>
           <div class="chips" id="mode-filter">
             <button class="chip is-active" data-mode="flat">الجدول الكامل</button>
-            <button class="chip" data-mode="bySingular">من المفرد إلى الجمع</button>
-            <button class="chip" data-mode="byPlural">من الجمع إلى المفرد</button>
+            <button class="chip" data-mode="bySingular">مفرد ← جمع</button>
+            <button class="chip" data-mode="byPlural">جمع ← مفرد</button>
           </div>
         </div>
       </div>

@@ -32,7 +32,7 @@
 
 ## الترخيص
 
-البيانات بموجب رخصة [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)، والشيفرة بموجب MIT. انظر [LICENSE.md](LICENSE.md).
+البيانات بموجب رخصة [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)، والنص البرمجي بموجب MIT. انظر [LICENSE.md](LICENSE.md).
 
 ---
 

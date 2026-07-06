@@ -15,7 +15,9 @@
   }
 
   /* ----------------------------- Arabic helpers ----------------------------- */
-  var DIAC = /[ً-ْٰـ]/;
+  var DIAC = /[ً-ْٰـ]/;      // harakat + superscript alef + tatweel (all stripped by normalize)
+  var HARAKA = /[ً-ْٰ]/;     // vowel marks only (no tatweel) — significant when the user types them
+  var TATWEEL = "ـ";
   function fold(ch) {
     if ("أإآٱ".indexOf(ch) >= 0) return "ا";
     if (ch === "ى") return "ي";
@@ -31,26 +33,64 @@
     return { norm: norm, map: map };
   }
   function normalize(str) { return buildNorm(str).norm; }
+  // like buildNorm but KEEPS harakat (folds letters, drops only tatweel) — for diacritic-sensitive search
+  function buildNormH(str) {
+    var norm = "", map = [];
+    for (var i = 0; i < str.length; i++) {
+      var ch = str[i];
+      if (ch === TATWEEL) continue;
+      norm += HARAKA.test(ch) ? ch : fold(ch); map.push(i);
+    }
+    return { norm: norm, map: map };
+  }
+  function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  // turn a harakat-bearing query into a regex source: letters the user vowelled must carry that
+  // exact haraka; letters left bare match any/no haraka. Runs against a buildNormH() haystack.
+  function buildQueryRegex(qh) {
+    var src = "";
+    for (var i = 0; i < qh.length; i++) {
+      if (HARAKA.test(qh[i])) continue; // stray mark with no preceding letter — skip
+      src += escRe(qh[i]);
+      var har = "";
+      while (i + 1 < qh.length && HARAKA.test(qh[i + 1])) { har += qh[++i]; }
+      src += har || "[ً-ْٰ]*";
+    }
+    return src;
+  }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-  // diacritic-insensitive highlight of normalized query nq within str
-  function hl(str, nq) {
-    if (!nq) return esc(str);
-    var b = buildNorm(str), hay = b.norm, out = "", pos = 0, from = 0, idx;
-    var ranges = [];
-    while ((idx = hay.indexOf(nq, from)) !== -1) {
-      ranges.push([b.map[idx], b.map[idx + nq.length - 1] + 1]);
-      from = idx + nq.length;
-    }
+  // paint <mark> around the given [start,end) ranges of the original string
+  function paintRanges(str, ranges) {
     if (!ranges.length) return esc(str);
+    var out = "", pos = 0;
     ranges.forEach(function (r) {
       out += esc(str.slice(pos, r[0])) + "<mark>" + esc(str.slice(r[0], r[1])) + "</mark>";
       pos = r[1];
     });
     return out + esc(str.slice(pos));
+  }
+  // highlight of normalized query nq within str; diacritic-sensitive when the active query is vowelled
+  function hl(str, nq) {
+    if (!nq) return esc(str);
+    if (state.hasDiac && state.rxg) return hlRegex(str, state.rxg);
+    var b = buildNorm(str), hay = b.norm, from = 0, idx, ranges = [];
+    while ((idx = hay.indexOf(nq, from)) !== -1) {
+      ranges.push([b.map[idx], b.map[idx + nq.length - 1] + 1]);
+      from = idx + nq.length;
+    }
+    return paintRanges(str, ranges);
+  }
+  function hlRegex(str, rx) {
+    var b = buildNormH(str), hay = b.norm, ranges = [], m;
+    rx.lastIndex = 0;
+    while ((m = rx.exec(hay)) !== null) {
+      if (!m[0].length) { rx.lastIndex++; continue; }
+      ranges.push([b.map[m.index], b.map[m.index + m[0].length - 1] + 1]);
+    }
+    return paintRanges(str, ranges);
   }
 
   /* ------------------------------ derived index ----------------------------- */
@@ -67,6 +107,7 @@
       r._ns = normalize(r.singular);
       r._np = normalize(r.plural);
       r._n = r._ns + " " + r._np + " " + normalize(r.type + " " + r.examples);
+      r._nh = buildNormH(r.singular + " " + r.plural + " " + r.type + " " + r.examples).norm;
     });
     var coll = new Intl.Collator("ar");
     singulars.sort(coll.compare);
@@ -108,7 +149,20 @@
 
   /* ================================ TABLE =================================== */
   // exact: null (free search) | {s,p} (exact pattern filter from a click)
-  var state = { q: "", nq: "", type: "all", mode: "flat", exact: null };
+  // hasDiac: the query carries harakat → match/highlight diacritic-sensitively via rx/rxg
+  var state = { q: "", nq: "", type: "all", mode: "flat", exact: null, hasDiac: false, rx: null, rxg: null };
+
+  // recompute the search state from a raw query string
+  function applyQuery(raw) {
+    state.q = raw;
+    state.nq = normalize(raw);
+    state.hasDiac = !!state.nq && HARAKA.test(raw);
+    if (state.hasDiac) {
+      var src = buildQueryRegex(buildNormH(raw).norm);
+      state.rx = new RegExp(src);        // stateless test() over r._nh
+      state.rxg = new RegExp(src, "g");  // exec() loop for highlighting
+    } else { state.rx = state.rxg = null; }
+  }
 
   function matchRow(r) {
     if (state.type !== "all" && r.type !== state.type) return false;
@@ -117,7 +171,9 @@
       if (state.exact.p != null && r.plural !== state.exact.p) return false;
       return true;
     }
-    return !state.nq || r._n.indexOf(state.nq) !== -1;
+    if (!state.nq) return true;
+    if (state.hasDiac) return state.rx.test(r._nh);
+    return r._n.indexOf(state.nq) !== -1;
   }
   // ranking for free-text search: exact column match first, then pattern, then examples
   function tier(r) {
@@ -190,14 +246,14 @@
   // clicking a pattern → exact filter on that wazn; a matrix cell → exact pair
   function filterExact(exact, mode) {
     state.exact = exact;
-    state.q = ""; state.nq = "";
+    applyQuery("");
     $("#search").value = "";
     if (mode) setMode(mode);
     renderTable();
     switchView("table");
   }
   function clearFilter() {
-    state.exact = null; state.q = ""; state.nq = "";
+    state.exact = null; applyQuery("");
     $("#search").value = "";
     renderTable();
   }
@@ -405,6 +461,8 @@
     if (!skipHash && location.hash.slice(1) !== view) {
       history.replaceState(null, "", "#" + view);
     }
+    // report tab switches to GA4 (no-op unless a Measurement ID is configured in index.html)
+    if (window.gtag) window.gtag("event", "view_tab", { tab_name: view });
   }
 
   /* ================================ THEME ================================== */
@@ -461,7 +519,7 @@
       clearTimeout(t);
       t = setTimeout(function () {
         state.exact = null; // typing leaves the exact-pattern filter
-        state.q = s.value.trim(); state.nq = normalize(state.q); renderTable();
+        applyQuery(s.value.trim()); renderTable();
       }, 110);
     });
     $("#sankey-reset").addEventListener("click", function () {
