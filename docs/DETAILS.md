@@ -77,11 +77,14 @@ python scripts/build_dataset.py   # يقرأ الجدول المُراجَع و�
 
 <div dir="rtl">
 
-- `scripts/build_dataset.py` — يقرأ الجدول المُراجَع، ويحذف عمود «الفروق»، ويُحلِّل الأمثلة، ويُخرج الصِّيَغ الثلاث وبيانات الموقع.
-- `scripts/parse_examples.py` — مُحلِّل الأمثلة إلى بنية مُنظَّمة.
-- `scripts/fetch_assets.py` — يُنزِّل ECharts وخطّ Noto Naskh Arabic محليًّا ليعمل الموقع دون اتصال.
-- `scripts/serve.py` — خادمٌ محلّيٌّ للمعاينة يُعطِّل التخزين المؤقّت: `python scripts/serve.py`.
-- `scripts/extract_tables.py` و`merge_tables.py` — نصوص الاستخراج والدمج الأصلية (للأرشيف).
+<!-- كل سطر يبدأ بعلامة RLM (U+200F) لأن GitHub يضع dir="auto" على القوائم،
+     فتُرسم يسارًا إذا بدأ السطر باسم ملفٍّ لاتيني. -->
+
+- ‏`scripts/build_dataset.py` — يقرأ الجدول المُراجَع، ويحذف عمود «الفروق»، ويُحلِّل الأمثلة، ويُخرج الصِّيَغ الثلاث وبيانات الموقع.
+- ‏`scripts/parse_examples.py` — مُحلِّل الأمثلة إلى بنية مُنظَّمة.
+- ‏`scripts/fetch_assets.py` — يُنزِّل ECharts وخطّ Noto Naskh Arabic محليًّا ليعمل الموقع دون اتصال.
+- ‏`scripts/serve.py` — خادمٌ محلّيٌّ للمعاينة يُعطِّل التخزين المؤقّت: `python scripts/serve.py`.
+- ‏`scripts/extract_tables.py` و`merge_tables.py` — نصوص الاستخراج والدمج الأصلية (للأرشيف).
 
 ## نشر GitHub Pages
 
